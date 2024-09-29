@@ -1,11 +1,13 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 const Timer = () => {
   const [time, setTime] = useState(25 * 60)
   const [isRunning, setIsRunning] = useState(false)
   const [isWork, setIsWork] = useState(true)
+  
+  const audioRef = useRef<HTMLAudioElement>(null)
 
   useEffect(() => {
     let interval: NodeJS.Timeout | null = null
@@ -15,6 +17,10 @@ const Timer = () => {
         setTime(prev => prev - 1)
       }, 1000)
     } else if (time === 0) {
+      if (audioRef.current) {
+        audioRef.current.play()
+      }
+
       setIsRunning(false)
       setIsWork(prev => !prev)
       setTime(isWork ? 5 * 60 : 25 * 60)
@@ -61,7 +67,7 @@ const Timer = () => {
         <div className="flex space-x-4 py-5">
           <button
             onClick={toggleTimer}
-            className="w-24 py-2 px-4 bg-gray-500/70 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-75 transition-colors duration-200"
+            className="w-24 py-2 px-4 bg-gray-500/70 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition-colors duration-200"
           >
             {isRunning ? 'Pause' : 'Start'}
           </button>
@@ -72,6 +78,7 @@ const Timer = () => {
             Reset
           </button>
         </div>
+        <audio ref={audioRef} src="/short_alarm.mp3" preload="auto" />
       </div>
     </div>
   )
