@@ -5,7 +5,7 @@ import User from "../icons/User"
 
 const Navbar = () => {
   return (
-    <header className="absolute left-0 right-0 mx-auto bg-transparent flex flex-row justify-center items-center gap-x-10 my-4">
+    <header className="absolute left-0 right-0 mx-auto flex flex-row justify-center items-center gap-x-10 my-4">
       <Link href="/" className="flex flex-row items-center gap-x-1 p-2 hover:rounded hover:bg-slate-600">
         <Home width="24" height="24" />
         Home
