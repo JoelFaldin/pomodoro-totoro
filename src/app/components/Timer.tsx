@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from "react"
+import Status from "./Status"
 
 const Timer = () => {
   const [time, setTime] = useState(25 * 60)
@@ -58,12 +59,16 @@ const Timer = () => {
       <div className="flex flex-col items-center">
         <h1 className="text-3xl font-bold text-center mb-8 w-full rounded-t-lg py-4 bg-gradient-to-r from-orange-500 to-orange-700">Pomodoro Timer</h1>
         <div className="text-6xl text-slate-200 font-bold mb-4" aria-live="polite">{formatTime(time)}</div>
+
+        <Status isWork={isWork} />
+
         <div className="w-3/4 bg-gray-200 rounded-full h-2 my-5">
           <div
             className="bg-orange-500 h-2 rounded-full transition-all duration-300 ease-in-out"
             style={{ width: `${calculateProgress()}%` }}
           ></div>
         </div>
+        
         <div className="flex space-x-4 py-5">
           <button
             onClick={toggleTimer}
