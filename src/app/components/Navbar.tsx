@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Home from "../icons/Home"
 import About from "../icons/About"
-import User from "../icons/User"
+import HeaderAuth from "./HeaderAuth"
 
 const Navbar = () => {
   return (
@@ -11,13 +11,10 @@ const Navbar = () => {
         Home
       </Link>
       <Link href="/about" className="flex flex-row items-center gap-x-1 p-2 hover:rounded hover:bg-slate-600">
-        <About />
+        <About width="24" height="24" />
         About
       </Link>
-      <Link href="/login" className="flex flex-row items-center gap-x-1 p-2 hover:rounded hover:bg-slate-600">
-        <User />
-        Log in
-      </Link>
+      <HeaderAuth />
     </header>
   )
 }

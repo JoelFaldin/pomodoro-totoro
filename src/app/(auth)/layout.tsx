@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import localFont from "next/font/local";
 import "../globals.css"
+import Provider from "../providers/SessionProvider";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -27,7 +28,11 @@ export default function RootLayout({
     <html lang="en">
       <link rel="icon" href="/totoro_icon.ico" sizes="any" />
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <main>{children}</main>
+        <Provider>
+          <main>
+            {children}
+          </main>
+        </Provider>
       </body>
     </html>
   )

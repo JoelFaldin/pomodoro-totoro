@@ -3,9 +3,10 @@
 import Image from "next/image"
 import Link from "next/link"
 import { useState } from "react"
-import Github from "@/app/icons/Github"
+// import Github from "@/app/icons/Github"
 import Google from "@/app/icons/Google"
 import Return from "@/app/icons/Return"
+import AuthButton from "@/app/components/AuthButton"
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -115,14 +116,8 @@ const Login = () => {
             </div>
 
             <div className="mt-6 grid grid-cols-2 gap-3">
-              <div>
-                <a
-                  href="#"
-                  className="w-full inline-flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-zinc-900 text-sm font-medium text-gray-500 hover:bg-gray-950"
-                >
-                  <span className="sr-only">Sign in with GitHub</span>
-                  <Github />
-                </a>
+              <div className="w-full inline-flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-zinc-900 text-sm font-medium text-gray-500 hover:bg-gray-950">
+                <AuthButton />
               </div>
 
               <div>
