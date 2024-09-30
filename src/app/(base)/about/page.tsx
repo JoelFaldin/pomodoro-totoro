@@ -27,7 +27,7 @@ const page = () => {
       <section className="mt-5 w-1/3 border p-5 rounded-lg flex flex-col gap-y-3">
         <h4 className="text-3xl font-bold underline">Totoro</h4>
         <a href="https://www.deviantart.com/mfujiart/art/Totoro-Wallpaper-853071023" target="_blank">
-          <Image src="/totoro_image.webp" alt="Totoro image!" width="400" height="40" className="mx-auto" priority />
+          <Image src="/totoro_image.webp" alt="Totoro image!" width="400" height="40" className="mx-auto w-auto" priority />
         </a>
       </section>
     </div>

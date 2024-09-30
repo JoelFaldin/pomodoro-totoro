@@ -115,7 +115,7 @@ const Login = () => {
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-3">
               <div className="w-full inline-flex justify-center py-2 px-4 border border-gray-700 rounded-md shadow-sm bg-zinc-900 text-sm font-medium text-gray-500 hover:bg-gray-950">
                 <AuthButton />
               </div>

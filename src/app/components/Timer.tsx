@@ -55,7 +55,7 @@ const Timer = () => {
   }
 
   return (
-    <div className="bg-black rounded-lg shadow-md mb-8 w-3/12">
+    <div className="bg-black rounded-lg shadow-md mb-8 w-3/12 min-w-[330px]">
       <div className="flex flex-col items-center">
         <h1 className="text-3xl font-bold text-center mb-8 w-full rounded-t-lg py-4 bg-gradient-to-r from-orange-500 to-orange-700">Pomodoro Timer</h1>
         <div className="text-6xl text-slate-200 font-bold mb-4" aria-live="polite">{formatTime(time)}</div>
