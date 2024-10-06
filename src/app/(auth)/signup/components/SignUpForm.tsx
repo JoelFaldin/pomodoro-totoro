@@ -2,8 +2,6 @@
 
 import { useState } from "react"
 
-import { signUp } from "../../actions"
-
 const SignUpForm = () => {
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('')
@@ -24,7 +22,7 @@ const SignUpForm = () => {
     form.append('username', username)
     form.append('password', password)
 
-    await signUp(form)
+    // await signUp(form)
   }
   
   return (
