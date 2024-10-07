@@ -1,41 +1,37 @@
 'use client'
 
 import { useState } from "react"
+import { SubmitHandler, useForm } from "react-hook-form"
+
+interface RegisterFormInput {
+  email: string,
+  username: string,
+  password: string,
+  repeatPassword: string
+}
 
 const SignUpForm = () => {
-  const [credentials, setCredentials] = useState({
-    email: "",
-    username: "",
-    password: "",
-    repeatPassword: ""
-  })
+  const { register, formState: { errors }, handleSubmit } = useForm<RegisterFormInput>()
   const [error, setError] = useState<string | null>(null)
 
-  const handleCredentials = (field: keyof typeof credentials, value: string) => {
-    setCredentials({
-      ...credentials,
-      [field]: value
-    })
-  }
+  const onSubmit: SubmitHandler<RegisterFormInput> = async (data) => {
+    console.log(data)
 
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-
-    if (credentials.password !== credentials.repeatPassword) {
+    if (data.password !== data.repeatPassword) {
       setError('Passwords do not match!')
       return
     }
 
-    const form = new FormData()
-    form.append('email', credentials.email)
-    form.append('username', credentials.username)
-    form.append('password', credentials.password)
+    // const form = new FormData()
+    // form.append('email', credentials.email)
+    // form.append('username', credentials.username)
+    // form.append('password', credentials.password)
 
     // await signUp(form)
   }
   
   return (
-    <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+    <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="rounded-md shadow-sm -space-y-px">
         <div>
           <label htmlFor="email" className="sr-only">
@@ -43,14 +39,13 @@ const SignUpForm = () => {
           </label>
           <input
             id="email"
-            name="email"
             type="email"
             autoComplete="email"
-            required
             className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
             placeholder="Email address"
-            onChange={event => handleCredentials("email", event.target.value)}
+            {...register("email", { required: "Please enter your email address!" })}
           />
+          {errors.email && <p className="text-sm mb-2 text-red-500">{errors.email.message}</p>}
         </div>
 
         <div>
@@ -59,14 +54,13 @@ const SignUpForm = () => {
           </label>
           <input
             id="username"
-            name="username"
             type="username"
             autoComplete="username"
-            required
             className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
             placeholder="Type your username!"
-            onChange={event => handleCredentials("username", event.target.value)}
+            {...register("username", { required: "You should enter a username" })}
           />
+          {errors.username && <p className="text-sm mb-2 text-red-500">{errors.username.message}</p>}
         </div>
 
         <div>
@@ -75,14 +69,13 @@ const SignUpForm = () => {
           </label>
           <input
             id="password"
-            name="password"
             type="password"
             autoComplete="password"
-            required
             className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
             placeholder="Password"
-            onChange={event => handleCredentials("password", event.target.value)}
+            {...register("password", { required: "Please enter your password." })}
           />
+          {errors.password && <p className="text-sm mb-2 text-red-500">{errors.password.message}</p>}
         </div>
 
         <div>
@@ -91,18 +84,15 @@ const SignUpForm = () => {
           </label>
           <input
             id="repeat-password"
-            name="repeat-password"
             type="password"
             autoComplete="repeat-password"
-            required
             className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 rounded-b-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
             placeholder="Repeat your password"
-            onChange={event => handleCredentials("repeatPassword", event.target.value)}
+            {...register("repeatPassword", { required: "Please complete this field!" })}
           />
+          {errors.repeatPassword && <p className="text-sm mb-2 text-red-500">{errors.repeatPassword.message}</p>}
         </div>
-
-        {/* <PasswordsComp setPassword={setPassword} setRepeatPassword={setRepeatPassword} /> */}
-        {error ?? <p className="text-sm">{error}</p>}
+        {error && <p className="text-sm text-red-500">{error}</p>}
       </div>
 
       <div>

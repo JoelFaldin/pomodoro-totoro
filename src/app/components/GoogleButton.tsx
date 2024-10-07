@@ -5,7 +5,6 @@ import Google from "../icons/Google"
 
 const AuthButtonGoogle = () => {
   const { data: session } = useSession()
-  console.log(session)
 
   return session ? (
     <button onClick={async () => await signOut()} className="w-full">
