@@ -38,7 +38,7 @@ const LoginForm = () => {
           onChange={event => handleCredentials("email", event.target.value)}
         />
 
-        {/* <div className="relative"> */}
+        <div className="relative">
           <label htmlFor="password" className="sr-only">
             Password
           </label>
@@ -63,7 +63,7 @@ const LoginForm = () => {
               <EyeIcon className="h-5 w-5 text-gray-400" />
             )} */}
           </button>
-        {/* </div> */}
+        </div>
       </div>
 
       <div className="flex items-center justify-between">

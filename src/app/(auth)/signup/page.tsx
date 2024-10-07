@@ -2,8 +2,8 @@ import Image from "next/image"
 import Link from "next/link"
 
 import Return from "@/app/icons/Return"
-import AuthButtonGH from "@/app/components/AuthButtonGH"
-import AuthButtonGoogle from "@/app/components/AuthButtonGoogle"
+import AuthButtonGH from "@/app/components/GithubButton"
+import AuthButtonGoogle from "@/app/components/GoogleButton"
 import SignUpForm from "./components/SignUpForm"
 
 const SignUp = () => {
@@ -51,7 +51,7 @@ const SignUp = () => {
             <p className="text-center text-sm text-gray-600">
               Do you have an account?{' '}
               <Link href="/login" className="font-medium text-orange-600 hover:text-orange-500">
-                Sign in now
+                Log in now
               </Link>
             </p>
           </div>

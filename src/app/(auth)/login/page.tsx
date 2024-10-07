@@ -2,8 +2,8 @@ import Image from "next/image"
 import Link from "next/link"
 
 import Return from "@/app/icons/Return"
-import AuthButtonGH from "@/app/components/AuthButtonGH"
-import AuthButtonGoogle from "@/app/components/AuthButtonGoogle"
+import AuthButtonGH from "@/app/components/GithubButton"
+import AuthButtonGoogle from "@/app/components/GoogleButton"
 import LoginForm from "./components/LoginForm"
 
 const Login = () => {

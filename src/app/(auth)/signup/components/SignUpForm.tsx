@@ -3,24 +3,33 @@
 import { useState } from "react"
 
 const SignUpForm = () => {
-  const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [repeatPassword, setRepeatPassword] = useState('')
+  const [credentials, setCredentials] = useState({
+    email: "",
+    username: "",
+    password: "",
+    repeatPassword: ""
+  })
   const [error, setError] = useState<string | null>(null)
+
+  const handleCredentials = (field: keyof typeof credentials, value: string) => {
+    setCredentials({
+      ...credentials,
+      [field]: value
+    })
+  }
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
 
-    if (password !== repeatPassword) {
+    if (credentials.password !== credentials.repeatPassword) {
       setError('Passwords do not match!')
       return
     }
 
     const form = new FormData()
-    form.append('email', email)
-    form.append('username', username)
-    form.append('password', password)
+    form.append('email', credentials.email)
+    form.append('username', credentials.username)
+    form.append('password', credentials.password)
 
     // await signUp(form)
   }
@@ -40,7 +49,7 @@ const SignUpForm = () => {
             required
             className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
             placeholder="Email address"
-            onChange={event => setEmail(event.target.value)}
+            onChange={event => handleCredentials("email", event.target.value)}
           />
         </div>
 
@@ -56,7 +65,7 @@ const SignUpForm = () => {
             required
             className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
             placeholder="Type your username!"
-            onChange={event => setUsername(event.target.value)}
+            onChange={event => handleCredentials("username", event.target.value)}
           />
         </div>
 
@@ -72,7 +81,7 @@ const SignUpForm = () => {
             required
             className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
             placeholder="Password"
-            onChange={event => setPassword(event.target.value)}
+            onChange={event => handleCredentials("password", event.target.value)}
           />
         </div>
 
@@ -88,7 +97,7 @@ const SignUpForm = () => {
             required
             className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 rounded-b-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
             placeholder="Repeat your password"
-            onChange={event => setRepeatPassword(event.target.value)}
+            onChange={event => handleCredentials("repeatPassword", event.target.value)}
           />
         </div>
 
