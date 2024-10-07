@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
+import axios from "axios"
 
 interface RegisterFormInput {
   email: string,
@@ -22,12 +23,13 @@ const SignUpForm = () => {
       return
     }
 
-    // const form = new FormData()
-    // form.append('email', credentials.email)
-    // form.append('username', credentials.username)
-    // form.append('password', credentials.password)
+    const res = await axios.post('/api/users', {
+      email: data.email,
+      username: data.username,
+      password: data.password
+    })
 
-    // await signUp(form)
+    console.log(res)
   }
   
   return (
