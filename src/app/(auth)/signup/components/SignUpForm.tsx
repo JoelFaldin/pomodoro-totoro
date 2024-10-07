@@ -2,9 +2,10 @@
 
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import axios from "axios"
 import { toast } from "sonner"
 import Success from "@/app/icons/Success"
+import { useRouter } from "next/navigation"
+import axios from "axios"
 
 interface RegisterFormInput {
   email: string,
@@ -16,9 +17,9 @@ interface RegisterFormInput {
 const SignUpForm = () => {
   const { register, formState: { errors }, handleSubmit } = useForm<RegisterFormInput>()
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   const onSubmit: SubmitHandler<RegisterFormInput> = async (data) => {
-    console.log(data)
 
     if (data.password !== data.repeatPassword) {
       setError('Passwords do not match!')
@@ -31,10 +32,12 @@ const SignUpForm = () => {
       password: data.password
     })
 
-    toast.success("User created!", {
+    toast.success("User created! Now log in with your credentials...", {
       duration: 3000,
       icon: <Success />
     })
+
+    router.push("/login")
   }
   
   return (

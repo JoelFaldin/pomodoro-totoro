@@ -1,19 +1,34 @@
 'use client'
 
+import Success from "@/app/icons/Success"
+import axios from "axios"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { toast } from "sonner"
+
+interface LoginFormInput {
+  email: string,
+  password: string
+}
 
 const LoginForm = () => {
+  const { register, formState: { errors }, handleSubmit } = useForm<LoginFormInput>()
   const [showPassword, setShowPassword] = useState(false)
-  const [credentials, setCredentials] = useState({
-    email: "",
-    password: ""
-  })
+  const router = useRouter()
 
-  const handleCredentials = (field: keyof typeof credentials, value: string) => {
-    setCredentials({
-      ...credentials,
-      [field]: value
+  const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
+    await axios.post('/api/auth', {
+      email: data.email,
+      password: data.password
     })
+
+    toast.success("Successfully logged in! Redirecting...", {
+      duration: 3000,
+      icon: <Success />
+    })
+    
+    router.push("/")
   }
 
   const togglePasswordVisibility = () => {
@@ -21,7 +36,7 @@ const LoginForm = () => {
   }
 
   return (
-    <form className="mt-8 space-y-6">
+    <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <div className="rounded-md shadow-sm -space-y-px">
 
         <label htmlFor="email-address" className="sr-only">
@@ -29,14 +44,14 @@ const LoginForm = () => {
         </label>
         <input
           id="email-address"
-          name="email"
           type="email"
           autoComplete="email"
           required
           className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
           placeholder="Email address"
-          onChange={event => handleCredentials("email", event.target.value)}
+          {...register("email", { required: "Please type your email!" }) }
         />
+        {errors.email && <p className="text-sm mb-2 text-red-500">{errors.email.message}</p>}
 
         <div className="relative">
           <label htmlFor="password" className="sr-only">
@@ -44,14 +59,15 @@ const LoginForm = () => {
           </label>
           <input
             id="password"
-            name="password"
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
             required
             className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 rounded-b-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
             placeholder="Password"
-            onChange={event => handleCredentials("password", event.target.value)}
+            {...register("password", { required: "Please type your password." })}
           />
+          {errors.password && <p className="text-sm mb-2 text-red-500">{errors.password.message}</p>}
+
           <button
             type="button"
             className="absolute inset-y-0 right-0 pr-3 flex items-center"
