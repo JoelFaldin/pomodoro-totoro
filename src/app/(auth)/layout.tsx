@@ -1,4 +1,6 @@
 import { Metadata } from "next";
+import { Toaster } from "sonner";
+
 import localFont from "next/font/local";
 import "../globals.css"
 import Provider from "../providers/SessionProvider";
@@ -25,15 +27,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <>
       <link rel="icon" href="/totoro_icon.ico" sizes="any" />
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <div className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Provider>
           <main>
+            <Toaster richColors position="bottom-center" />
             {children}
           </main>
         </Provider>
-      </body>
-    </html>
+      </div>
+    </>
   )
 }

@@ -26,16 +26,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <>
       <link rel="icon" href="/totoro_icon.ico" sizes="any" />
-      <body
+      <div
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Provider>
           <Navbar />
           {children}
         </Provider>
-      </body>
-    </html>
+      </div>
+    </>
   );
 }

@@ -3,6 +3,8 @@
 import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import axios from "axios"
+import { toast } from "sonner"
+import Success from "@/app/icons/Success"
 
 interface RegisterFormInput {
   email: string,
@@ -23,13 +25,16 @@ const SignUpForm = () => {
       return
     }
 
-    const res = await axios.post('/api/users', {
+    await axios.post('/api/users', {
       email: data.email,
       username: data.username,
       password: data.password
     })
 
-    console.log(res)
+    toast.success("User created!", {
+      duration: 3000,
+      icon: <Success />
+    })
   }
   
   return (
