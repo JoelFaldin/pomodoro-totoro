@@ -9,35 +9,41 @@ export const POST = async (request: Request) => {
   const { email, password } = await request.json()
 
   try {
-    // Search for the user in the database:
     const user = await prisma.user.findUnique({
       where: {
         email: email
       }
     })
 
-    // If the user is not found, return an error to the client:
     if (!user) {
       return NextResponse.json({ error: "User not found" })
     }
     
-    // If the user exists, compare provided password to hashed password:
     const passwordComparisson = await bcrypt.compare(password, user.password)
     
     if (!passwordComparisson) {
       return NextResponse.json({ error: "Wrong credentials, try again." })
     }
 
-    // Sign jwt token:
     const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET)
 
-    return NextResponse.json({
+    const response = NextResponse.json({ 
       email,
       name: user.name,
-      token
     })
+
+    response.cookies.set({
+      name: "auth-token",
+      value: token,
+      httpOnly: false,
+      secure: false,
+      path: "/",
+      maxAge: 60 * 60 * 24 * 7
+    })
+
+    return response
   } catch (error) {
-    console.log(error)
+    console.error(error)
     return NextResponse.json({ error: "Something bad happened" })
   }
 }

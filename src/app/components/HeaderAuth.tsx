@@ -2,6 +2,7 @@
 
 import { signOut, useSession } from "next-auth/react"
 import Link from "next/link"
+
 import User from "../icons/User"
 import Logout from "../icons/Logout"
 
