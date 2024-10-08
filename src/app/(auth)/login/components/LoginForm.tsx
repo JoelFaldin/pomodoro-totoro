@@ -1,12 +1,14 @@
 'use client'
 
-import { useUser } from "@/app/context/UserContext"
-import Success from "@/app/icons/Success"
-import axios from "axios"
+import { SubmitHandler, useForm } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-import { SubmitHandler, useForm } from "react-hook-form"
 import { toast } from "sonner"
+import axios from "axios"
+
+import { useUser } from "@/app/context/UserContext"
+import Success from "@/app/icons/Success"
+import Error from "@/app/icons/Error"
 
 interface LoginFormInput {
   email: string,
@@ -20,19 +22,33 @@ const LoginForm = () => {
   const { setUser } = useUser()
 
   const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
-    const userData = await axios.post('/api/auth/login', {
-      email: data.email,
-      password: data.password
-    })
-
-    setUser(userData.data)
-
-    toast.success("Successfully logged in! Redirecting...", {
-      duration: 3000,
-      icon: <Success />
-    })
-    
-    router.push("/")
+    try {
+      const userData = await axios.post('/api/auth/login', {
+        email: data.email,
+        password: data.password
+      })
+  
+      setUser(userData.data)
+  
+      toast.success("Successfully logged in! Redirecting...", {
+        duration: 3000,
+        icon: <Success />
+      })
+      
+      router.push("/")
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data.error, {
+          duration: 3000,
+          icon: <Error />
+        })
+      } else {
+        toast.error("There was a problem. Try again later...", {
+          duration: 3000,
+          icon: <Error />
+        })
+      }
+    }
   }
 
   const togglePasswordVisibility = () => {

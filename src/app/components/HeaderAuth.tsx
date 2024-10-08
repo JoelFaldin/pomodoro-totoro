@@ -7,6 +7,8 @@ import { useUser } from "../context/UserContext"
 import User from "../icons/User"
 import Logout from "../icons/Logout"
 import axios from "axios"
+import { toast } from "sonner"
+import Success from "../icons/Success"
 
 const HeaderAuth = () => {
   const { data: session } = useSession()
@@ -18,6 +20,11 @@ const HeaderAuth = () => {
     } else {
       await axios.post("/api/auth/logout")
       setUser(null)
+
+      toast.success("Logged out!", {
+        duration: 3000,
+        icon: <Success />
+      })
     }
   }
 
