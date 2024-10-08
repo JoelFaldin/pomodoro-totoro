@@ -1,5 +1,6 @@
 'use client'
 
+import { useUser } from "@/app/context/UserContext"
 import Success from "@/app/icons/Success"
 import axios from "axios"
 import { useRouter } from "next/navigation"
@@ -16,12 +17,15 @@ const LoginForm = () => {
   const { register, formState: { errors }, handleSubmit } = useForm<LoginFormInput>()
   const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
+  const { setUser } = useUser()
 
   const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
-    await axios.post('/api/auth', {
+    const userData = await axios.post('/api/auth/login', {
       email: data.email,
       password: data.password
     })
+
+    setUser(userData.data)
 
     toast.success("Successfully logged in! Redirecting...", {
       duration: 3000,
