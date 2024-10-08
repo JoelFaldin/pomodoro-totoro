@@ -25,7 +25,7 @@ export const POST = async (request: Request) => {
       return NextResponse.json({ error: "Wrong credentials, try again." })
     }
 
-    const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET)
+    const token = jwt.sign({ userId: user.id, email: user.email, username: user.name }, JWT_SECRET)
 
     const response = NextResponse.json({ 
       email,

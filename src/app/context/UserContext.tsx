@@ -1,6 +1,7 @@
 'use client'
 
-import React, { createContext, ReactNode, useContext, useState } from 'react'
+import axios from 'axios';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 
 interface User {
   email: string;
@@ -16,6 +17,21 @@ const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const data = await axios.get("/api/auth/check")
+      
+      if (data.status === 200) {
+        const authUser = {
+          email: data.data.email,
+          username: data.data.username
+        }
+        setUser(authUser)
+      }
+    }
+    getUserData()
+  }, [])
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
