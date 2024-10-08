@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { toast } from "sonner"
-import Success from "@/app/icons/Success"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
+import { toast } from "sonner"
 import axios from "axios"
+
+import Success from "@/app/icons/Success"
 
 interface RegisterFormInput {
   email: string,

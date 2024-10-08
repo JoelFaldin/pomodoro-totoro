@@ -1,14 +1,14 @@
 'use client'
 
 import { signOut, useSession } from "next-auth/react"
-import Link from "next/link"
-import { useUser } from "../context/UserContext"
-
-import User from "../icons/User"
-import Logout from "../icons/Logout"
-import axios from "axios"
 import { toast } from "sonner"
+import Link from "next/link"
+import axios from "axios"
+
+import { useUser } from "../context/UserContext"
 import Success from "../icons/Success"
+import Logout from "../icons/Logout"
+import User from "../icons/User"
 
 const HeaderAuth = () => {
   const { data: session } = useSession()

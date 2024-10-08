@@ -1,7 +1,8 @@
 import Link from "next/link"
-import Home from "../icons/Home"
-import About from "../icons/About"
+
 import HeaderAuth from "./HeaderAuth"
+import About from "../icons/About"
+import Home from "../icons/Home"
 
 const Navbar = () => {
   return (

@@ -1,10 +1,10 @@
 import Image from "next/image"
 import Link from "next/link"
 
-import Return from "@/app/icons/Return"
-import AuthButtonGH from "@/app/components/GithubButton"
 import AuthButtonGoogle from "@/app/components/GoogleButton"
+import AuthButtonGH from "@/app/components/GithubButton"
 import SignUpForm from "./components/SignUpForm"
+import Return from "@/app/icons/Return"
 
 const SignUp = () => {
   return (
