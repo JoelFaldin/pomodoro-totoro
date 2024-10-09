@@ -2,9 +2,10 @@
 
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useState } from "react"
-import axios from "axios"
 
 import Save from "@/app/icons/Save"
+import { uploadAudio } from "@/app/libs/supabaseClient"
+import axios from "axios"
 
 interface ConfigInterface {
   timer?: string,
@@ -13,29 +14,29 @@ interface ConfigInterface {
 
 const Configuration = () => {
   const { register, handleSubmit } = useForm<ConfigInterface>()
-  const [audioFile, setAudioFile] = useState<string | null>(null)
+  const [audioFile, setAudioFile] = useState<File | null>(null)
 
   const saveTimer: SubmitHandler<ConfigInterface> = async (data) => {
     try {
-      const { data, error } = await supabase
-      
-      const formData = new FormData()
-
-
-
-      const timerData = await axios.post('/api/timer', formData)
-
-      console.log(timerData)
+      if (audioFile) {
+        const audioUrl = await uploadAudio(audioFile)
+        const res = await axios.post("/api/timer", {
+          timer: data.timer,
+          audio: audioUrl?.toString()
+        })
+        console.log(res)
+      } else {
+        console.error("No data.audio selected!")
+      }
     } catch (error) {
       console.log(error)
     }
   }
 
-  const handleAudioFileChange = (event: React.FormEvent<HTMLInputElement>) => {
-    const file = (event.target as HTMLInputElement).files?.[0]
+  const handleAudioFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
     if (file) {
-      const url = URL.createObjectURL(file)
-      setAudioFile(url)
+      setAudioFile(file)
     }
   }
 
@@ -61,7 +62,6 @@ const Configuration = () => {
             type="file"
             id="audio"
             accept="audio/*"
-            {...register("audio")}
             onChange={event => handleAudioFileChange(event)}
           />
         </section>

@@ -1,10 +1,19 @@
 import { NextResponse } from "next/server"
+import { randomUUID } from "crypto"
+
+import { prisma } from "@/app/libs/prisma"
 
 export const POST = async (request: Request) => {
   const { timer, audio } = await request.json()
 
   try {
-    console.log(timer, audio)
+    await prisma.timer.create({
+      data: {
+        id: randomUUID(),
+        timer,
+        audio
+      }
+    })
 
     return NextResponse.json({ message: "Timer data saved successfully!" }, { status: 201 })
   } catch (error) {
