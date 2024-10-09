@@ -18,8 +18,8 @@ export const GET = () => {
   if (token) {
     const data = jwt.verify(token.value.toString(), JWT_SECRET) as JWTPayload
 
-    return NextResponse.json({ message: "ok", email: data.email, username: data.username })
+    return NextResponse.json({ message: "ok", email: data.email, username: data.username }, { status: 200 })
   } else {
-    return NextResponse.json({ message: "No cookie found." })
+    return NextResponse.json({ message: "No cookie found." }, { status: 200 })
   }
 }

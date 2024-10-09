@@ -22,7 +22,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const getUserData = async () => {
       const data = await axios.get("/api/auth/check")
       
-      if (data.status === 200) {
+      if (data.data.message === 'ok') {
         const authUser = {
           email: data.data.email,
           username: data.data.username
