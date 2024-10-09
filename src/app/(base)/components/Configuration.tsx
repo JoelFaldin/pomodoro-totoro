@@ -2,10 +2,12 @@
 
 import { SubmitHandler, useForm } from "react-hook-form"
 import { useState } from "react"
-
-import Save from "@/app/icons/Save"
-import { uploadAudio } from "@/app/libs/supabaseClient"
+import { toast } from "sonner"
 import axios from "axios"
+
+import { uploadAudio } from "@/app/libs/supabaseClient"
+import Success from "@/app/icons/Success"
+import Save from "@/app/icons/Save"
 
 interface ConfigInterface {
   timer?: string,
@@ -17,14 +19,22 @@ const Configuration = () => {
   const [audioFile, setAudioFile] = useState<File | null>(null)
 
   const saveTimer: SubmitHandler<ConfigInterface> = async (data) => {
+    const loading = toast.loading("Saving timer data...")
+
     try {
       if (audioFile) {
         const audioUrl = await uploadAudio(audioFile)
-        const res = await axios.post("/api/timer", {
+        await axios.post("/api/timer", {
           timer: data.timer,
           audio: audioUrl?.toString()
         })
-        console.log(res)
+
+        toast.success("Time and audio saved!", {
+          duration: 3000,
+          icon: <Success />
+        })
+
+        toast.dismiss(loading)
       } else {
         console.error("No data.audio selected!")
       }
