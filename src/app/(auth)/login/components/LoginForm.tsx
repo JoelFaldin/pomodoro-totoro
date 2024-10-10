@@ -6,7 +6,7 @@ import { useState } from "react"
 import { toast } from "sonner"
 import axios from "axios"
 
-import { useUser } from "@/app/context/UserContext"
+import { useUser } from "@/app/hooks/userHook"
 import Success from "@/app/icons/Success"
 import Error from "@/app/icons/Error"
 

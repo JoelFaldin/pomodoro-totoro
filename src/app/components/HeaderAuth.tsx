@@ -5,7 +5,7 @@ import { toast } from "sonner"
 import Link from "next/link"
 import axios from "axios"
 
-import { useUser } from "../context/UserContext"
+import { useUser } from "../hooks/userHook"
 import Success from "../icons/Success"
 import Logout from "../icons/Logout"
 import User from "../icons/User"

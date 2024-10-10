@@ -1,7 +1,7 @@
 'use client'
 
 import axios from 'axios';
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react'
+import React, { createContext, ReactNode, useEffect, useState } from 'react'
 
 interface User {
   email: string;
@@ -13,7 +13,7 @@ interface UserContextType {
   setUser: (user: User | null) => void;
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined)
+export const UserContext = createContext<UserContextType | undefined>(undefined)
 
 export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
@@ -38,14 +38,4 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       {children}
     </UserContext.Provider>
   )
-}
-
-export const useUser = () => {
-  const context = useContext(UserContext)
-
-  if (!context) {
-    throw new Error("This hook can only be used within a UserProvider!")
-  }
-
-  return context
 }
