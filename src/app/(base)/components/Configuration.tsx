@@ -1,6 +1,7 @@
 'use client'
 
 import { SubmitHandler, useForm } from "react-hook-form"
+import { useSession } from "next-auth/react"
 import { useState } from "react"
 import { toast } from "sonner"
 import axios from "axios"
@@ -23,12 +24,13 @@ interface ConfigurationInterface {
 const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
   const { register, handleSubmit } = useForm<ConfigInterface>()
   const [audioFile, setAudioFile] = useState<File | null>(null)
+  const { data: session } = useSession()
 
   const saveTimer: SubmitHandler<ConfigInterface> = async (data) => {
     try {
       if (audioFile) {
         const loading = toast.loading("Saving timer data...")
-        const audioUrl = await uploadAudio(audioFile)
+        const audioUrl = await uploadAudio(audioFile, session?.user?.email ?? "")
         
         if (audioUrl?.userId) {
           await axios.post("/api/timer", {
@@ -61,6 +63,10 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
       }
     } catch (error) {
       console.log(error)
+      toast.error("There was an error, try again later.", {
+        duration: 3000,
+        icon: <Error />
+      })
     }
   }
 
