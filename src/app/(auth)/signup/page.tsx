@@ -10,8 +10,8 @@ const SignUp = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-900 to-gray-700 px-4 sm:px-6 lg:px-8">
       <div>
-        <Link href="/" className="flex flex-row items-center gap-x-2">
-          <Return />
+        <Link href="/" className="flex flex-row items-center gap-x-2 mt-4">
+          <Return color="white" />
           <p className="text-xl underline font-bold">Return</p>
         </Link>
       </div>

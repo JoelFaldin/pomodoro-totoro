@@ -30,7 +30,7 @@ export default function RootLayout({
     <>
       <link rel="icon" href="/totoro_icon.ico" sizes="any" />
       <div
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased text-white`}
       >
         <Provider>
           <Navbar />

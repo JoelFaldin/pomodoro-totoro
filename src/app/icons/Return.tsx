@@ -1,17 +1,18 @@
 interface ReturnInterface {
   width?: string,
   height?: string,
-  className?: string
+  className?: string,
+  color?: string
 }
 
-const Return: React.FC<ReturnInterface> = ({ width = '24', height = '24', className }) => {
+const Return: React.FC<ReturnInterface> = ({ width = '24', height = '24', className, color }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={width}
       height={height}
       fill="none"
-      stroke="currentColor"
+      stroke={color}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth="2"

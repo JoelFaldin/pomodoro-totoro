@@ -11,7 +11,7 @@ export default function Home() {
     <div className="bg-gradient-to-b from-slate-700 to-slate-800 w-full min-h-screen flex flex-col justify-center items-center">      
       <Timer showConfig={showConfig} setShowConfig={setShowConfig} />
       {showConfig ? (
-        <Configuration />
+        <Configuration setShowConfig={setShowConfig} />
       ) : (
         <></>
       )}

@@ -7,6 +7,7 @@ import axios from "axios"
 
 import { uploadAudio } from "@/app/libs/supabaseClient"
 import Success from "@/app/icons/Success"
+import Warning from "@/app/icons/Warning"
 import Save from "@/app/icons/Save"
 
 interface ConfigInterface {
@@ -14,15 +15,18 @@ interface ConfigInterface {
   audio?: File
 }
 
-const Configuration = () => {
+interface ConfigurationInterface {
+  setShowConfig: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
   const { register, handleSubmit } = useForm<ConfigInterface>()
   const [audioFile, setAudioFile] = useState<File | null>(null)
 
   const saveTimer: SubmitHandler<ConfigInterface> = async (data) => {
-    const loading = toast.loading("Saving timer data...")
-
     try {
       if (audioFile) {
+        const loading = toast.loading("Saving timer data...")
         const audioUrl = await uploadAudio(audioFile)
         await axios.post("/api/timer", {
           timer: data.timer,
@@ -35,8 +39,15 @@ const Configuration = () => {
         })
 
         toast.dismiss(loading)
+        setShowConfig(false)
       } else {
-        console.error("No data.audio selected!")
+        toast("No audio file selected!", {
+          style: {
+            background: '#f0ee99'
+          },
+          duration: 3000,
+          icon: <Warning width="20" height="20" />
+        })
       }
     } catch (error) {
       console.log(error)
