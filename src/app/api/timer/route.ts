@@ -4,14 +4,15 @@ import { randomUUID } from "crypto"
 import { prisma } from "@/app/libs/prisma"
 
 export const POST = async (request: Request) => {
-  const { timer, audio } = await request.json()
+  const { timer, audio, userId } = await request.json()
 
   try {
     await prisma.timer.create({
       data: {
         id: randomUUID(),
         timer,
-        audio
+        audio,
+        userId
       }
     })
 

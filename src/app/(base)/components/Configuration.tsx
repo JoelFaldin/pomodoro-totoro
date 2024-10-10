@@ -8,6 +8,7 @@ import axios from "axios"
 import { uploadAudio } from "@/app/libs/supabaseClient"
 import Success from "@/app/icons/Success"
 import Warning from "@/app/icons/Warning"
+import Error from "@/app/icons/Error"
 import Save from "@/app/icons/Save"
 
 interface ConfigInterface {
@@ -28,18 +29,27 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
       if (audioFile) {
         const loading = toast.loading("Saving timer data...")
         const audioUrl = await uploadAudio(audioFile)
-        await axios.post("/api/timer", {
-          timer: data.timer,
-          audio: audioUrl?.toString()
-        })
+        
+        if (audioUrl?.userId) {
+          await axios.post("/api/timer", {
+            timer: data.timer,
+            audio: audioUrl?.publicUrl.toString(),
+            userId: audioUrl?.userId
+          })
 
-        toast.success("Time and audio saved!", {
-          duration: 3000,
-          icon: <Success />
-        })
-
-        toast.dismiss(loading)
-        setShowConfig(false)
+          toast.success("Time and audio saved!", {
+            duration: 3000,
+            icon: <Success />
+          })
+  
+          toast.dismiss(loading)
+          setShowConfig(false)
+        } else {
+          toast.error("There was a problem in the server, please try again later.", {
+            duration: 3000,
+            icon: <Error />
+          })
+        }
       } else {
         toast("No audio file selected!", {
           style: {

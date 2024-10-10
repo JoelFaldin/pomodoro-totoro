@@ -22,4 +22,5 @@ model Timer {
   id String @id
   timer String
   audio String
+  userId String @unique
 }
