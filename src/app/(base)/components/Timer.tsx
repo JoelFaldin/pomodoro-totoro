@@ -1,31 +1,50 @@
 'use client'
 
-import { useEffect, useRef, useState } from "react"
-import { useSession } from "next-auth/react"
+import { RefObject, useEffect, useState } from "react"
+import axios from "axios"
 
-import { useUser } from "@/app/context/UserContext"
-import Status from "../../components/Status"
-import Settings from "@/app/icons/Settings"
+import { useUser } from "@/app/hooks/userHook"
 
 interface TimerInterface {
-  showConfig: boolean,
-  setShowConfig: React.Dispatch<React.SetStateAction<boolean>>
+  isWork: boolean,
+  setIsWork: React.Dispatch<boolean>,
+  audioRef: RefObject<HTMLAudioElement>,
 }
 
-const Timer: React.FC<TimerInterface> = ({ showConfig, setShowConfig }) => {
-  const [time, setTime] = useState(25 * 60)
-  const [isRunning, setIsRunning] = useState(false)
-  const [isWork, setIsWork] = useState(true)
-  const { data: session } = useSession()
+const Timer: React.FC<TimerInterface> = ({ isWork, setIsWork, audioRef }) => {
   const { user } = useUser()
-  
-  const audioRef = useRef<HTMLAudioElement>(null)
+  const [time, setTime] = useState(25 * 60)
+  const [userTime, setUserTime] = useState<number | null>(null)
+  const [isRunning, setIsRunning] = useState(false)
 
   useEffect(() => {
-    let interval: NodeJS.Timeout | null = null
+    const fetchData = async () => {
+      if (user) {
+        try {
+          const res = await axios.get("/api/timer")
+          const savedTime = Number(res.data.timer)
 
+          if (!isNaN(savedTime)) {
+            setTime(savedTime * 60)
+            setUserTime(savedTime * 60)
+          }
+        } catch (error) {
+          console.error("There was a problem fetching the data: ", error)
+          setTime(25 * 60)
+        }
+      } else {
+        setTime(25 * 60)
+      }
+    }
+
+    fetchData()
+  }, [user])
+
+  // Timer:
+  useEffect(() => {
+    let timer: NodeJS.Timeout | null = null
     if (isRunning && time > 0) {
-      interval = setInterval(() => {
+      timer = setInterval(() => {
         setTime(prev => prev - 1)
       }, 1000)
     } else if (time === 0) {
@@ -34,30 +53,19 @@ const Timer: React.FC<TimerInterface> = ({ showConfig, setShowConfig }) => {
       }
 
       setIsRunning(false)
-      setIsWork(prev => !prev)
+      setIsWork(false)
       setTime(isWork ? 5 * 60 : 25 * 60)
     }
 
     return () => {
-      if (interval) clearInterval(interval)
+      if (timer) clearInterval(timer)
     }
+  }, [time, isRunning, audioRef, setIsRunning, setIsWork, isWork])
 
-  }, [isRunning, time, isWork])
-  
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const remaining = seconds % 60
     return `${mins.toString().padStart(2, '0')}:${remaining.toString().padStart(2, '0')}`
-  }
-
-  const toggleTimer = () => {
-    setIsRunning(!isRunning)
-  }
-
-  const resetTimer = () => {
-    const newSeconds = 25 * 60
-    setTime(newSeconds)
-    setIsRunning(false)
   }
 
   const calculateProgress = () => {
@@ -65,56 +73,46 @@ const Timer: React.FC<TimerInterface> = ({ showConfig, setShowConfig }) => {
     return ((totalTime - time) / totalTime) * 100
   }
 
-  const handleConfig = () => {
-    setShowConfig(!showConfig)
+  const resetTimer = () => {
+    if (userTime && user) {
+      setTime(userTime)
+    } else {
+      setTime(25 * 60)
+    }
+    setIsRunning(false)
+  }
+
+  const toggleTimer = () => {
+    setIsRunning(!isRunning)
   }
 
   return (
-    <div className="bg-black rounded-lg shadow-md mb-8 mt-20 w-3/12 min-w-[330px]">
-      <div className="flex flex-col items-center">
-        <h1 className="text-3xl font-bold text-center mb-8 w-full rounded-t-lg py-4 bg-gradient-to-r from-orange-500 to-orange-700">Pomodoro Timer</h1>
-        <div className="text-6xl text-slate-200 font-bold mb-4" aria-live="polite">{formatTime(time)}</div>
+    <>
+      <div className="text-6xl text-slate-200 font-bold mb-4" aria-live="polite">{formatTime(time)}</div>
 
-        <Status isWork={isWork} />
-
-        <div className="w-3/4 bg-gray-200 rounded-full h-2 my-5">
-          <div
-            className="bg-orange-500 h-2 rounded-full transition-all duration-300 ease-in-out"
-            style={{ width: `${calculateProgress()}%` }}
-          ></div>
-        </div>
-        
-        <div className="flex space-x-4 py-5">
-          <button
-            onClick={toggleTimer}
-            className="w-24 py-2 px-4 bg-gray-500/70 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition-colors duration-200"
-          >
-            {isRunning ? 'Pause' : 'Start'}
-          </button>
-          <button
-            onClick={resetTimer}
-            className="w-24 py-2 px-4 bg-gray-200 text-gray-700 font-semibold rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition-colors"
-          >
-            Reset
-          </button>
-
-        </div>
-        {session || user ? (
-          <>
-            <button
-            onClick={handleConfig}
-            className="w-fit py-2 px-4 mb-5 flex flex-row gap-x-1 bg-gray-500/70 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition-colors duration-200"
-            >
-              <Settings />
-              {showConfig ? "Hide config": "Show config"}
-            </button>
-          </>
-        ) : (
-          <></>
-        )}
-        <audio ref={audioRef} src="/short_alarm.mp3" preload="auto" />
+      <div className="w-3/4 bg-gray-200 rounded-full h-2 my-5">
+        <div
+          className="bg-orange-500 h-2 rounded-full transition-all duration-300 ease-in-out"
+          style={{ width: `${calculateProgress()}%` }}
+        ></div>
       </div>
-    </div>
+
+      <div className="flex space-x-4 py-5">
+        <button
+          onClick={toggleTimer}
+          className="w-24 py-2 px-4 bg-gray-500/70 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition-colors duration-200"
+        >
+          {isRunning ? 'Pause' : 'Start'}
+        </button>
+        <button
+          onClick={resetTimer}
+          className="w-24 py-2 px-4 bg-gray-200 text-gray-700 font-semibold rounded-lg shadow-md hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75 transition-colors"
+        >
+          Reset
+        </button>
+
+      </div>
+    </>
   )
 }
 

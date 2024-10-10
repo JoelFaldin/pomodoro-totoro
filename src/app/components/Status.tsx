@@ -7,7 +7,7 @@ interface StatusInterface {
 
 const Status: React.FC<StatusInterface> = ({ isWork }) => {
   return (
-    <div className="flex flex-row justify-center items-center opacity-50 gap-x-2">
+    <div className="flex flex-row justify-center items-center opacity-50 gap-x-2 mb-4">
       {
         isWork ? (
           <>

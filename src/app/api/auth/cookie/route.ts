@@ -18,5 +18,7 @@ export const GET = () => {
     const data = jwt.verify(token.value.toString(), JWT_SECRET) as JWTPayload
 
     return NextResponse.json({ userId: data.userId })
+  } else {
+    return NextResponse.json({ message: "No user token found" }, { status: 200 })
   }
 }
