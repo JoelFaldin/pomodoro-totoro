@@ -8,7 +8,7 @@ export const POST = async (request: Request) => {
   
   try {
     const saltRounds = 10
-    const hashedPassword = await  bcrypt.hash(password, saltRounds)
+    const hashedPassword = await bcrypt.hash(password, saltRounds)
     
     const newUser = await prisma.user.create({
       data: {

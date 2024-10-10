@@ -19,6 +19,10 @@ export const POST = async (request: Request) => {
       return NextResponse.json({ error: "User not found, try another email!" }, { status: 404 })
     }
     
+    if (!user.password) {
+      return NextResponse.json({ error: "You should type a password!" }, { status: 400 })
+    }
+
     const passwordComparisson = await bcrypt.compare(password, user.password)
     
     if (!passwordComparisson) {
@@ -35,7 +39,7 @@ export const POST = async (request: Request) => {
     response.cookies.set({
       name: "auth-token",
       value: token,
-      httpOnly: false,
+      httpOnly: true,
       secure: false,
       path: "/",
       maxAge: 60 * 60 * 24 * 7

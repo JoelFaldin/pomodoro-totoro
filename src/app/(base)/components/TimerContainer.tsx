@@ -4,7 +4,7 @@ import { useRef, useState } from "react"
 import { useSession } from "next-auth/react"
 
 import { useUser } from "@/app/hooks/userHook"
-import Status from "../../components/Status"
+import Status from "@/app/components/Status"
 import Settings from "@/app/icons/Settings"
 import Timer from "./Timer"
 
