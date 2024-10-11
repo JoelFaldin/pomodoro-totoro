@@ -52,6 +52,7 @@ export const POST = async (request: Request) => {
 
     return response
   } catch (error) {
+    console.error(error)
     return NextResponse.json({ error: "Something weird has happened, try again later." }, { status: 500 })
   }
 }

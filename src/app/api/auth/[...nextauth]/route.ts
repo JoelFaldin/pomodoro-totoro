@@ -26,7 +26,7 @@ const handler = NextAuth({
         })
         return true
       } catch (error) {
-        console.log("There was an error trying to save authjs user to the database.")
+        console.error("There was an error trying to save authjs user to the database.", error)
         return false
       }
     }
