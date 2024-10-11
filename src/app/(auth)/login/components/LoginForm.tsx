@@ -66,7 +66,6 @@ const LoginForm = () => {
           id="email-address"
           type="email"
           autoComplete="email"
-          required
           className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 rounded-t-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
           placeholder="Email address"
           {...register("email", { required: "Please type your email!" }) }
@@ -81,7 +80,6 @@ const LoginForm = () => {
             id="password"
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
-            required
             className="appearance-none bg-transparent rounded-none relative block w-full px-3 py-2 border border-gray-700 placeholder-gray-500 text-gray-100 rounded-b-md focus:outline-none focus:ring-orange-500 focus:border-orange-500 focus:z-10 sm:text-sm"
             placeholder="Password"
             {...register("password", { required: "Please type your password." })}

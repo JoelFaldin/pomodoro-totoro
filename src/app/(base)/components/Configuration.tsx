@@ -24,7 +24,7 @@ interface ConfigurationInterface {
 }
 
 const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
-  const { register, handleSubmit } = useForm<ConfigInterface>()
+  const { register, formState: { errors }, handleSubmit } = useForm<ConfigInterface>()
   const [audioFile, setAudioFile] = useState<File | null>(null)
   const { data: session } = useSession()
   const { setTime } = useTime()
@@ -100,8 +100,9 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
             type="text"
             className="appearance-none bg-transparent rounded-sm relative block w-full px-2 py-1 border border-gray-700 text-gray-100"
             placeholder="25"
-            {...register("timer")}
+            {...register("timer", { required: "Please indicate a time. (It is 25 by default)" })}
           />
+          {errors.timer && <p className="text-sm my-1 text-red-500">{errors.timer.message}</p>}
         </section>
 
         <section className="flex flex-col mb-5">
