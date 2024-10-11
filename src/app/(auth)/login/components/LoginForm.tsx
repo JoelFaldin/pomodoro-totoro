@@ -9,6 +9,8 @@ import axios from "axios"
 import { useUser } from "@/app/hooks/userHook"
 import Success from "@/app/icons/Success"
 import Error from "@/app/icons/Error"
+import Eye from "@/app/icons/Eye"
+import EyeOff from "@/app/icons/EyeOff"
 
 interface LoginFormInput {
   email: string,
@@ -88,14 +90,14 @@ const LoginForm = () => {
 
           <button
             type="button"
-            className="absolute inset-y-0 right-0 pr-3 flex items-center"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center z-10"
             onClick={togglePasswordVisibility}
           >
-            {/* {showPassword ? (
-              <EyeOffIcon className="h-5 w-5 text-gray-400" />
+            {!showPassword ? (
+              <Eye className="h-5 w-5 text-gray-400" />
             ) : (
-              <EyeIcon className="h-5 w-5 text-gray-400" />
-            )} */}
+              <EyeOff className="h-5 w-5 text-gray-400" />
+            )}
           </button>
         </div>
       </div>

@@ -45,7 +45,7 @@ export const POST = async (request: Request) => {
       name: "auth-token",
       value: token,
       httpOnly: true,
-      secure: false,
+      secure: true,
       path: "/",
       maxAge: 60 * 60 * 24 * 7
     })
