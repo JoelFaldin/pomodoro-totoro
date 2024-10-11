@@ -35,8 +35,8 @@ export const TimeProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
           if (!isNaN(savedTime)) {
             setTime({
-              time: savedTime * 60,
-              userTime: savedTime * 60
+              time: Math.round(savedTime * 60),
+              userTime: Math.round(savedTime * 60)
             })
           }
           setAudio(res.data.audio)

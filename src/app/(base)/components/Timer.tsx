@@ -24,11 +24,13 @@ const Timer: React.FC<TimerInterface> = ({ isWork, setIsWork, audioRef }) => {
         const prevTime = time.time
         setTime((prev) => ({
           ...prev,
-          time: prevTime - 1
+          time: Math.floor(prevTime - 1)
         }))
       }, 1000)
-    } else if (time.time === 0) {
+    } else if (time.time <= 0) {
       if (audioRef.current) {
+        audioRef.current.pause()
+        audioRef.current.currentTime = 0
         audioRef.current.play()
       }
 
@@ -36,7 +38,7 @@ const Timer: React.FC<TimerInterface> = ({ isWork, setIsWork, audioRef }) => {
         setIsWork(false)
         setTime((prev) => ({
           ...prev,
-          time: 0.2 * 60
+          time: 5 * 60
         }))
       } else {
         setIsWork(true)
@@ -59,7 +61,7 @@ const Timer: React.FC<TimerInterface> = ({ isWork, setIsWork, audioRef }) => {
   }
 
   const calculateProgress = () => {
-    const totalTime = isWork ? (time.userTime ?? 25 * 60) : 0.2 * 60
+    const totalTime = isWork ? Math.floor((time.userTime ?? 25 * 60)) : 5 * 60
     return ((totalTime - time.time) / totalTime) * 100
   }
 

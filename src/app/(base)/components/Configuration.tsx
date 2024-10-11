@@ -38,7 +38,7 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
         
         if (audioUrl?.userId) {
           await axios.post("/api/timer", {
-            timer: data.timer,
+            timer: Number(data.timer),
             audio: audioUrl?.publicUrl.toString(),
             userId: audioUrl?.userId
           })
@@ -49,8 +49,8 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
           })
 
           setTime({
-            time: Number(data.timer) * 60,
-            userTime: Number(data.timer) * 60
+            time: Math.floor(Number(data.timer) * 60),
+            userTime: Math.floor(Number(data.timer) * 60)
           })
 
           setAudio(audioUrl?.publicUrl.toString())
