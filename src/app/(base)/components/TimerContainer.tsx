@@ -3,6 +3,7 @@
 import { useRef, useState } from "react"
 import { useSession } from "next-auth/react"
 
+import { useAudio } from "@/app/hooks/useAudio"
 import { useUser } from "@/app/hooks/userHook"
 import Status from "@/app/components/Status"
 import Settings from "@/app/icons/Settings"
@@ -17,6 +18,7 @@ const TimerContainer: React.FC<TimerContainerInterface> = ({ showConfig, setShow
   const [isWork, setIsWork] = useState(true)
   const { data: session } = useSession()
   const { user } = useUser()
+  const { audio } = useAudio()
   
   const audioRef = useRef<HTMLAudioElement>(null)
 
@@ -44,7 +46,7 @@ const TimerContainer: React.FC<TimerContainerInterface> = ({ showConfig, setShow
         ) : (
           <></>
         )}
-        <audio ref={audioRef} src="/short_alarm.mp3" preload="auto" />
+        <audio ref={audioRef} src={audio ?? "/short_alarm.mp3"} preload="auto" />
       </div>
     </div>
   )

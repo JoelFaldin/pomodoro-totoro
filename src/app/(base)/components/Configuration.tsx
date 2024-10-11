@@ -7,6 +7,7 @@ import { toast } from "sonner"
 import axios from "axios"
 
 import { uploadAudio } from "@/app/libs/supabaseClient"
+import { useAudio } from "@/app/hooks/useAudio"
 import { useTime } from "@/app/hooks/timeHook"
 import Success from "@/app/icons/Success"
 import Warning from "@/app/icons/Warning"
@@ -27,6 +28,7 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
   const [audioFile, setAudioFile] = useState<File | null>(null)
   const { data: session } = useSession()
   const { setTime } = useTime()
+  const { setAudio } = useAudio()
 
   const saveTimer: SubmitHandler<ConfigInterface> = async (data) => {
     try {
@@ -50,6 +52,8 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
             time: Number(data.timer) * 60,
             userTime: Number(data.timer) * 60
           })
+
+          setAudio(audioUrl?.publicUrl.toString())
   
           toast.dismiss(loading)
           setShowConfig(false)

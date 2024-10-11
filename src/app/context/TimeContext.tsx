@@ -3,6 +3,7 @@
 import { createContext, ReactNode, useEffect, useState } from "react"
 import axios from "axios"
 
+import { useAudio } from "../hooks/useAudio"
 import { useUser } from "../hooks/userHook"
 
 interface Time {
@@ -23,6 +24,7 @@ export const TimeProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     userTime: null
   })
   const { user } = useUser()
+  const { setAudio } = useAudio()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +39,7 @@ export const TimeProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
               userTime: savedTime * 60
             })
           }
+          setAudio(res.data.audio)
         } catch (error) {
           console.error("There was a problem fetching the data: ", error)
           setTime((prev) => ({
@@ -53,7 +56,7 @@ export const TimeProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
 
     fetchData()
-  }, [user])
+  }, [user, setAudio])
 
   return (
     <TimeContext.Provider value={{ time, setTime }}>

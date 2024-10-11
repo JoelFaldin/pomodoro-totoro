@@ -1,6 +1,7 @@
 import localFont from "next/font/local";
 import type { Metadata } from "next";
 
+import { AudioProvider } from "../context/AudioContext";
 import { TimeProvider } from "../context/TimeContext";
 import Provider from "../providers/SessionProvider";
 import Navbar from "../components/Navbar";
@@ -34,10 +35,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased text-white`}
       >
         <Provider>
-          <TimeProvider>
-            <Navbar />
-            {children}
-          </TimeProvider>
+          <AudioProvider>
+            <TimeProvider>
+              <Navbar />
+              {children}
+            </TimeProvider>
+          </AudioProvider>
         </Provider>
       </div>
     </>
