@@ -10,6 +10,25 @@ export const uploadAudio = async (file: File, email: string) => {
   const cookie = await axios.get('/api/auth/cookie')
 
   if (cookie.data.message === "ok") {
+    const { data: files, error: listError } = await supabase.storage
+      .from("audios_pomodoro")
+      .list(cookie.data.userId)
+
+    if (listError) {
+      throw new Error("Error checking audio existence on supabase.")
+    }
+
+    if (files.length > 0) {
+      const filePaths = files.map(file => `${cookie.data.userId}/${file.name}`);
+      const { error: deleteError } = await supabase.storage
+        .from("audios_pomodoro")
+        .remove(filePaths)
+
+      if (deleteError) {
+        throw new Error("There was a server problem, try again later D:")
+      }
+    }
+
     const { data, error } = await supabase.storage
       .from("audios_pomodoro")
       .upload(`${cookie.data.userId}/${file.name}`, file, {
@@ -28,6 +47,25 @@ export const uploadAudio = async (file: File, email: string) => {
     return { publicUrl, userId: cookie.data.userId }
   } else {
     try {
+      const { data: files, error: listError } = await supabase.storage
+        .from("audios_pomodoro")
+        .list(cookie.data.userId)
+
+      if (listError) {
+        throw new Error("Error checking audio existence on supabase.")
+      }
+
+      if (files.length > 0) {
+        const filePaths = files.map(file => `${cookie.data.userId}/${file.name}`);
+        const { error: deleteError } = await supabase.storage
+          .from("audios_pomodoro")
+          .remove(filePaths)
+
+        if (deleteError) {
+          throw new Error("There was a server problem, try again later D:")
+        }
+      }
+
       const res = await axios.post("/api/auth/cookie", {
         email
       })

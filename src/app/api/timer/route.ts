@@ -48,16 +48,36 @@ export const POST = async (request: Request) => {
   const { timer, audio, userId } = await request.json()
 
   try {
-    await prisma.timer.create({
-      data: {
-        id: randomUUID(),
-        timer,
-        audio,
+    const searchTimerData = await prisma.timer.findUnique({
+      where: {
         userId
       }
     })
 
-    return NextResponse.json({ message: "Timer data saved successfully!" }, { status: 201 })
+    if (!searchTimerData) {
+      await prisma.timer.create({
+        data: {
+          id: randomUUID(),
+          timer,
+          audio,
+          userId
+        }
+      })
+  
+      return NextResponse.json({ message: "Timer data saved successfully!" }, { status: 201 })
+    } else {
+      await prisma.timer.update({
+        where: {
+          userId: userId
+        },
+        data: {
+          timer,
+          audio
+        }
+      })
+
+      return NextResponse.json({ message: "Timer data updated!" }, { status: 200 })
+    }
   } catch (error) {
     console.log(error)
 
