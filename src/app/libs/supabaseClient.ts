@@ -23,7 +23,7 @@ export const uploadAudio = async (file: File, email: string) => {
 
     const { data: { publicUrl } } = supabase.storage
       .from("audios_pomodoro")
-      .getPublicUrl(data?.fullPath)
+      .getPublicUrl(data?.path)
 
     return { publicUrl, userId: cookie.data.userId }
   } else {
@@ -34,7 +34,7 @@ export const uploadAudio = async (file: File, email: string) => {
 
       const { data, error } = await supabase.storage
         .from("audios-pomodoro")
-        .upload(`${res.data.userId}/${file.name}`, file, {
+        .upload(`${res.data.userId}/${file.name}`, file, {  
           cacheControl: '3600',
           upsert: false,
         })
@@ -45,10 +45,11 @@ export const uploadAudio = async (file: File, email: string) => {
 
       const { data: { publicUrl } } = supabase.storage
       .from("audios_pomodoro")
-      .getPublicUrl(data?.fullPath)
+      .getPublicUrl(data?.path)
 
     return { publicUrl, userId: cookie.data.userId }
     } catch (error) {
+      console.log(error)
       throw new Error("There was an error, check supabase bucket.")
     }
   }
