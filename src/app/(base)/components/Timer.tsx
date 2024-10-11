@@ -1,9 +1,9 @@
 'use client'
 
 import { RefObject, useEffect, useState } from "react"
-import axios from "axios"
 
 import { useUser } from "@/app/hooks/userHook"
+import { useTime } from "@/app/hooks/timeHook"
 
 interface TimerInterface {
   isWork: boolean,
@@ -13,58 +13,44 @@ interface TimerInterface {
 
 const Timer: React.FC<TimerInterface> = ({ isWork, setIsWork, audioRef }) => {
   const { user } = useUser()
-  const [time, setTime] = useState(25 * 60)
-  const [userTime, setUserTime] = useState<number | null>(null)
   const [isRunning, setIsRunning] = useState(false)
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (user) {
-        try {
-          const res = await axios.get("/api/timer")
-          const savedTime = Number(res.data.timer)
-
-          if (!isNaN(savedTime)) {
-            setTime(savedTime * 60)
-            setUserTime(savedTime * 60)
-          }
-        } catch (error) {
-          console.error("There was a problem fetching the data: ", error)
-          setTime(25 * 60)
-        }
-      } else {
-        setTime(25 * 60)
-      }
-    }
-
-    fetchData()
-  }, [user])
+  const { time, setTime } = useTime()
 
   // Timer:
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null
-    if (isRunning && time > 0) {
+    if (isRunning && time && time.time > 0) {
       timer = setInterval(() => {
-        setTime(prev => prev - 1)
+        const prevTime = time.time
+        setTime((prev) => ({
+          ...prev,
+          time: prevTime - 1
+        }))
       }, 1000)
-    } else if (time === 0) {
+    } else if (time.time === 0) {
       if (audioRef.current) {
         audioRef.current.play()
       }
 
       if (isWork) {
         setIsWork(false)
-        setTime(0.2 * 60)
+        setTime((prev) => ({
+          ...prev,
+          time: 0.2 * 60
+        }))
       } else {
         setIsWork(true)
-        setTime(userTime ?? 25 * 60)
+        setTime((prev) => ({
+          ...prev,
+          time: prev.userTime ?? 25 * 60
+        }))
       }
     }
 
     return () => {
       if (timer) clearInterval(timer)
     }
-  }, [time, isRunning, audioRef, setIsRunning, setIsWork, isWork])
+  }, [time, isRunning, audioRef, setIsRunning, setIsWork, isWork, setTime])
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
@@ -73,15 +59,21 @@ const Timer: React.FC<TimerInterface> = ({ isWork, setIsWork, audioRef }) => {
   }
 
   const calculateProgress = () => {
-    const totalTime = isWork ? (userTime ?? 25 * 60) : 0.2 * 60
-    return ((totalTime - time) / totalTime) * 100
+    const totalTime = isWork ? (time.userTime ?? 25 * 60) : 0.2 * 60
+    return ((totalTime - time.time) / totalTime) * 100
   }
 
   const resetTimer = () => {
-    if (userTime && user) {
-      setTime(userTime)
+    if (time.userTime && user) {
+      setTime((prev) => ({
+        ...prev,
+        time: Number(prev.userTime)
+      }))
     } else {
-      setTime(25 * 60)
+      setTime((prev) => ({
+        ...prev,
+        time: 25 * 60
+      }))
     }
     setIsRunning(false)
   }
@@ -92,7 +84,7 @@ const Timer: React.FC<TimerInterface> = ({ isWork, setIsWork, audioRef }) => {
 
   return (
     <>
-      <div className="text-6xl text-slate-200 font-bold mb-4" aria-live="polite">{formatTime(time)}</div>
+      <div className="text-6xl text-slate-200 font-bold mb-4" aria-live="polite">{formatTime(time.time)}</div>
 
       <div className="w-3/4 bg-gray-200 rounded-full h-2 my-5">
         <div

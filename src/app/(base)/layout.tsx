@@ -1,7 +1,8 @@
-import Provider from "../providers/SessionProvider";
 import localFont from "next/font/local";
 import type { Metadata } from "next";
 
+import { TimeProvider } from "../context/TimeContext";
+import Provider from "../providers/SessionProvider";
 import Navbar from "../components/Navbar";
 import "../globals.css";
 
@@ -33,8 +34,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased text-white`}
       >
         <Provider>
-          <Navbar />
-          {children}
+          <TimeProvider>
+            <Navbar />
+            {children}
+          </TimeProvider>
         </Provider>
       </div>
     </>
