@@ -20,11 +20,15 @@ interface LoginFormInput {
 const LoginForm = () => {
   const { register, formState: { errors }, handleSubmit } = useForm<LoginFormInput>()
   const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { setUser } = useUser()
 
   const onSubmit: SubmitHandler<LoginFormInput> = async (data) => {
     try {
+      setIsLoading(true)
+      const loading = toast.loading("Logging in...")
+
       const userData = await axios.post('/api/auth/login', {
         email: data.email,
         password: data.password
@@ -38,6 +42,7 @@ const LoginForm = () => {
       })
       
       router.push("/")
+      toast.dismiss(loading)
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data.error, {
@@ -50,6 +55,8 @@ const LoginForm = () => {
           icon: <Error />
         })
       }
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -113,7 +120,8 @@ const LoginForm = () => {
       <div>
         <button
           type="submit"
-          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          disabled={isLoading}
+          className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md ${isLoading ? "text-black bg-gray-200 cursor-default" : "text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"} `}
         >
           Log in
         </button>

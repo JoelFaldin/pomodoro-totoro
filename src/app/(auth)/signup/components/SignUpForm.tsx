@@ -22,9 +22,12 @@ const SignUpForm = () => {
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
   const [showRepeatPassword, setShowRepeatPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
 
   const onSubmit: SubmitHandler<RegisterFormInput> = async (data) => {
+    setIsLoading(true)
+    const loading = toast.loading("Creating user...")
 
     if (data.password !== data.repeatPassword) {
       setError('Passwords do not match!')
@@ -42,6 +45,8 @@ const SignUpForm = () => {
       icon: <Success />
     })
 
+    setIsLoading(false)
+    toast.dismiss(loading)
     router.push("/login")
   }
 
@@ -145,7 +150,8 @@ const SignUpForm = () => {
       <div>
         <button
           type="submit"
-          className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          disabled={isLoading}
+          className={`group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md ${isLoading ? "text-black bg-gray-200 cursor-auto" : "text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"}`}
         >
           Create account
         </button>

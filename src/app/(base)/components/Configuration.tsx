@@ -26,6 +26,7 @@ interface ConfigurationInterface {
 const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
   const { register, formState: { errors }, handleSubmit } = useForm<ConfigInterface>()
   const [audioFile, setAudioFile] = useState<File | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const { data: session } = useSession()
   const { setTime } = useTime()
   const { setAudio } = useAudio()
@@ -33,6 +34,7 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
   const saveTimer: SubmitHandler<ConfigInterface> = async (data) => {
     try {
       if (audioFile) {
+        setIsLoading(true)
         const loading = toast.loading("Saving timer data...")
         const audioUrl = await uploadAudio(audioFile, session?.user?.email ?? "")
         
@@ -78,6 +80,8 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
         duration: 3000,
         icon: <Error />
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -116,7 +120,7 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
         </section>
 
         <div className="flex justify-center">
-          <button type="submit" className="w-24 py-2 px-4 flex flex-row gap-x-2 bg-gray-500/70 text-white font-semibold rounded-lg shadow-md hover:bg-orange-700 transition-colors duration-200">
+          <button type="submit" disabled={isLoading} className={`w-24 py-2 px-4 flex flex-row gap-x-2 ${isLoading ? "bg-gray-200 text-black cursor-default" : "bg-gray-500/70 text-white hover:bg-orange-700 cursor-pointer font-semibold"} rounded-lg shadow-md transition-colors duration-200`}>
             <Save />
             Save
           </button>
