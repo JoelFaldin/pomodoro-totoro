@@ -120,7 +120,7 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
         </section>
 
         <div className="flex justify-center">
-          <button type="submit" disabled={isLoading} className={`w-24 py-2 px-4 flex flex-row gap-x-2 ${isLoading ? "bg-gray-200 text-black cursor-default" : "bg-gray-500/70 text-white hover:bg-orange-700 cursor-pointer font-semibold"} rounded-lg shadow-md transition-colors duration-200`}>
+          <button type="submit" disabled={isLoading} className={`w-24 py-2 px-4 flex flex-row gap-x-2 ${isLoading ? "bg-gray-200 text-gray-500 cursor-default" : "bg-gray-500/70 text-white hover:bg-orange-700 cursor-pointer font-semibold"} rounded-lg shadow-md transition-colors duration-200`}>
             <Save />
             Save
           </button>

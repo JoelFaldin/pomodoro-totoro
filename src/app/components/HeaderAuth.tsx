@@ -15,6 +15,7 @@ const HeaderAuth = () => {
   const { user, setUser } = useUser()
 
   const handleSignOut = async () => {
+    const loading = toast.loading("Logging in...")
     if (session) {
       await signOut()
     } else {
@@ -26,6 +27,8 @@ const HeaderAuth = () => {
         icon: <Success />
       })
     }
+    
+    toast.dismiss(loading)
   }
 
   return session || user ? (
