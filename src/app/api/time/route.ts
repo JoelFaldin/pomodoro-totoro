@@ -4,7 +4,6 @@ import { randomUUID } from "crypto"
 
 export const POST = async (request: Request) => {
   const { timer, userId } = await request.json()
-  console.log(timer, userId)
 
   try {
     const searchTimerData = await prisma.timer.findUnique({

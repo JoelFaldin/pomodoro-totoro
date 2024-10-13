@@ -1,22 +1,18 @@
 -- CreateTable
 CREATE TABLE "User" (
-    "id" TEXT NOT NULL,
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "created_at" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "email" TEXT NOT NULL,
     "password" TEXT,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+    "name" TEXT NOT NULL
 );
 
 -- CreateTable
 CREATE TABLE "Timer" (
-    "id" TEXT NOT NULL,
-    "timer" DOUBLE PRECISION,
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "timer" REAL,
     "audio" TEXT,
-    "userId" TEXT NOT NULL,
-
-    CONSTRAINT "Timer_pkey" PRIMARY KEY ("id")
+    "userId" TEXT NOT NULL
 );
 
 -- CreateIndex

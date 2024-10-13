@@ -41,8 +41,8 @@ const LoginForm = () => {
         icon: <Success />
       })
       
-      router.push("/")
       toast.dismiss(loading)
+      router.push("/")
     } catch (error) {
       if (axios.isAxiosError(error)) {
         toast.error(error.response?.data.error, {
