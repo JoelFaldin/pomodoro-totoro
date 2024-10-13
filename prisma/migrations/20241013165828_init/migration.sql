@@ -12,8 +12,8 @@ CREATE TABLE "User" (
 -- CreateTable
 CREATE TABLE "Timer" (
     "id" TEXT NOT NULL,
-    "timer" DOUBLE PRECISION NOT NULL,
-    "audio" TEXT NOT NULL,
+    "timer" DOUBLE PRECISION,
+    "audio" TEXT,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "Timer_pkey" PRIMARY KEY ("id")

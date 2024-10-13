@@ -21,7 +21,7 @@ model User {
 
 model Timer {
   id String @id
-  timer Float
-  audio String
+  timer Float?
+  audio String?
   userId String @unique
 }
