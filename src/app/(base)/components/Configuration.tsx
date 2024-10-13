@@ -10,7 +10,6 @@ import { uploadAudio } from "@/app/libs/supabaseClient"
 import { useAudio } from "@/app/hooks/useAudio"
 import { useTime } from "@/app/hooks/timeHook"
 import Success from "@/app/icons/Success"
-import Warning from "@/app/icons/Warning"
 import Error from "@/app/icons/Error"
 import Save from "@/app/icons/Save"
 
@@ -66,13 +65,36 @@ const Configuration: React.FC<ConfigurationInterface> = ({ setShowConfig }) => {
           })
         }
       } else {
-        toast("No audio file selected!", {
-          style: {
-            background: '#f0ee99'
-          },
-          duration: 3000,
-          icon: <Warning width="20" height="20" />
-        })
+        const loading = toast.loading("Saving timer data...")
+
+        try {
+          const cookie = await axios.get('/api/auth/cookie')
+
+          await axios.post("/api/time", {
+            timer: Number(data.timer),
+            userId: cookie.data.userId
+          })
+
+          toast.success("Time saved!", {
+            duration: 3000,
+            icon: <Success />
+          })
+
+          setTime({
+            time: Math.floor(Number(data.timer) * 60),
+            userTime: Math.floor(Number(data.timer) * 60)
+          })
+  
+          setShowConfig(false)
+        } catch (error) {
+          console.log(error)
+          toast.error("There was a problem in the server, please try again later.", {
+            duration: 3000,
+            icon: <Error />
+          })
+        } finally {
+          toast.dismiss(loading)
+        }
       }
     } catch (error) {
       console.log(error)
