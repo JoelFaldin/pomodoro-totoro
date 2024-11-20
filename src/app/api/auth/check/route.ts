@@ -16,7 +16,7 @@ export const GET = () => {
   const token = cookieStore.get("auth-token")
 
   if (token) {
-    const data = jwt.verify(token.value.toString(), JWT_SECRET) as JWTPayload
+    const data = jwt.verify(token.value.toString().replace('Bearer ', ''), JWT_SECRET) as JWTPayload
 
     return NextResponse.json({ message: "ok", email: data.email, username: data.username }, { status: 200 })
   } else {
