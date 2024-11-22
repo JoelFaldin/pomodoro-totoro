@@ -1,7 +1,7 @@
-import axios from 'axios';
-import NextAuth from 'next-auth';
 import GitHubProvider from 'next-auth/providers/github';
-import GoogleProvider from 'next-auth/providers/google'
+import GoogleProvider from 'next-auth/providers/google';
+import NextAuth from 'next-auth';
+import axios from 'axios';
 
 const handler = NextAuth({
   providers: [
@@ -24,6 +24,7 @@ const handler = NextAuth({
         await axios.post(`${process.env.NEXTAUTH_URL}/api/auth/new`, {
           user
         })
+
         return true
       } catch (error) {
         console.error("There was an error trying to save authjs user to the database.", error)

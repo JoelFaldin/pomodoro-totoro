@@ -10,7 +10,16 @@ import Success from "../icons/Success"
 import Logout from "../icons/Logout"
 import User from "../icons/User"
 
-const HeaderAuth = () => {
+interface UserInterface {
+  username: string,
+  email: string
+}
+
+interface HeaderInterface {
+  userData: UserInterface | null
+}
+
+const HeaderAuth: React.FC<HeaderInterface> = ({ userData }) => {
   const { data: session } = useSession()
   const { user, setUser } = useUser()
 
@@ -31,7 +40,7 @@ const HeaderAuth = () => {
     toast.dismiss(loading)
   }
 
-  return session || user ? (
+  return userData || user ? (
     <button onClick={handleSignOut} className="flex flex-row items-center gap-x-1 p-2 hover:rounded hover:bg-slate-600">
       <Logout />
       Sign out

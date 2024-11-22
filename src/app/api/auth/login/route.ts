@@ -7,7 +7,6 @@ const JWT_SECRET = process.env.SECRET || ""
 
 export const POST = async (request: Request) => {
   const { email, password } = await request.json()
-  console.log(email, password);
 
   try {
     const user = await prisma.user.findUnique({
