@@ -3,9 +3,10 @@
   "rules": {
     "no-unused-vars": "error",
     "@typescript-eslint/no-unused-vars": [
-      "warn",
+      "off",
       {
-        "argsIgnorePattern": "^_"
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
       }
     ]
   }
