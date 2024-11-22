@@ -7,6 +7,7 @@ const JWT_SECRET = process.env.SECRET || ""
 
 export const POST = async (request: Request) => {
   const { email, password } = await request.json()
+  console.log(email, password);
 
   try {
     const user = await prisma.user.findUnique({
@@ -18,15 +19,13 @@ export const POST = async (request: Request) => {
     if (!user) {
       return NextResponse.json({ error: "User not found, try another email!" }, { status: 404 })
     }
-    
-    if (!user.password) {
-      return NextResponse.json({ error: "You should type a password!" }, { status: 400 })
-    }
 
-    const passwordComparisson = await bcrypt.compare(password, user.password)
-    
-    if (!passwordComparisson) {
-      return NextResponse.json({ error: "Incorrect password, try again." }, { status: 401 })
+    if (user.password) {
+      const passwordComparisson = await bcrypt.compare(password, user.password)
+      
+      if (!passwordComparisson) {
+        return NextResponse.json({ error: "Incorrect password, try again." }, { status: 401 })
+      }
     }
 
     const token = jwt.sign({ userId: user.id, email: user.email, username: user.name }, JWT_SECRET)
@@ -46,8 +45,7 @@ export const POST = async (request: Request) => {
     })
 
     return response
-  } catch (error) {
-    console.error(error)
-    return NextResponse.json({ error: "Something bad happened" }, { status: 500 })
+  } catch (_error) {
+    return NextResponse.json({ error: "Something bad happened, try again later!" }, { status: 500 })
   }
 }
