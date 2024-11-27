@@ -3,12 +3,19 @@
 import { signIn, signOut, useSession } from "next-auth/react"
 
 import Github from "../icons/Github"
+import { useRouter } from "next/navigation"
 
 const AuthButton = () => {
   const { data: session } = useSession()
+  const router = useRouter()
+
+  const handleLogout = async () => {
+    await signOut()
+    router.refresh()
+  }
 
   return session ? (
-    <button onClick={async () => await signOut()} className="w-full">
+    <button onClick={handleLogout} className="w-full">
       <div className="flex justify-center items-center">
         <Github />
       </div>

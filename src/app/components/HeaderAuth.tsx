@@ -9,6 +9,7 @@ import { useUser } from "../hooks/userHook"
 import Success from "../icons/Success"
 import Logout from "../icons/Logout"
 import User from "../icons/User"
+import { useRouter } from "next/navigation"
 
 interface UserInterface {
   username: string,
@@ -22,6 +23,7 @@ interface HeaderInterface {
 const HeaderAuth: React.FC<HeaderInterface> = ({ userData }) => {
   const { data: session } = useSession()
   const { user, setUser } = useUser()
+  const router = useRouter()
 
   const handleSignOut = async () => {
     const loading = toast.loading("Logging in...")
@@ -38,6 +40,7 @@ const HeaderAuth: React.FC<HeaderInterface> = ({ userData }) => {
     }
     
     toast.dismiss(loading)
+    router.refresh()
   }
 
   return userData || user ? (
