@@ -14,6 +14,7 @@ const Navbar = async () => {
   const cookieStore = cookies()
   const token = cookieStore.get('auth-token')
   const accessToken = cookieStore.get('next-auth.session-token')
+  const prodAccessToken = cookieStore.get('__Secure-next-auth.session-token')
 
   let user = null
 
@@ -21,6 +22,8 @@ const Navbar = async () => {
     if (token) {
       const data = jwt.verify(token.value.toString().replace('Bearer ', ''), JWT_SECRET) as JwtPayload
       user = { username: data?.username, email: data?.email }
+
+      return
     } else if (accessToken) {
       const data = await decode({
         token: accessToken.value,
@@ -28,6 +31,17 @@ const Navbar = async () => {
       })
       
       user = { username: data?.name, email: data?.email }
+
+      return
+    } else if (prodAccessToken) {
+      const data = await decode({
+        token: prodAccessToken.value,
+        secret: NEXTAUTH_SECRET
+      })
+
+      user = { username: data?.name, email: data?.email }
+
+      return
     }
   }
   
