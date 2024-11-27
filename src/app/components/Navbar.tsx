@@ -18,28 +18,27 @@ const Navbar = async () => {
 
   let user = null
 
+  const decodeToken = async (token: string) => {
+    const data = await decode({
+      token: token,
+      secret: NEXTAUTH_SECRET
+    })
+    
+    return { username: data?.name, email: data?.email }
+  }
+
   const checkToken = async () => {
     if (token) {
       const data = jwt.verify(token.value.toString().replace('Bearer ', ''), JWT_SECRET) as JwtPayload
       user = { username: data?.username, email: data?.email }
 
       return
-    } else if (accessToken) {
-      const data = await decode({
-        token: accessToken.value,
-        secret: NEXTAUTH_SECRET
-      })
-      
-      user = { username: data?.name, email: data?.email }
+    } else if (accessToken) {      
+      user = await decodeToken(accessToken.value)
 
       return
     } else if (prodAccessToken) {
-      const data = await decode({
-        token: prodAccessToken.value,
-        secret: NEXTAUTH_SECRET
-      })
-
-      user = { username: data?.name, email: data?.email }
+      user = await decodeToken(prodAccessToken.value)
 
       return
     }
